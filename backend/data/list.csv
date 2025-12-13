@@ -1,0 +1,6 @@
+id,title,meta_path,format
+7708234640-VSHPE2016166,"Социально-демографическое обследование",https://rosstat.gov.ru/opendata/7708234640-VSHP2016166/meta.csv,csv
+7708234640-unlettered1517th,"Микроперепись – неграмотные 15–17 лет",data/datasets/7708234640-unlettered1517th/meta.csv,csv
+7708234640-ignorededucationstatus1819th,"Микроперепись – образовательный статус 18–19 лет",data/datasets/7708234640-ignorededucationstatus1819th/meta.csv,csv
+7708234640-totaloutignoreducation67th,"Микроперепись – уровень образования 6–7 лет",data/datasets/7708234640-totaloutignoreducation67th/meta.csv,csv
+7708234640-percentageresex3034th,"Микроперепись – процент по полу 30–34",data/datasets/7708234640-percentageresex3034th/meta.csv,csv

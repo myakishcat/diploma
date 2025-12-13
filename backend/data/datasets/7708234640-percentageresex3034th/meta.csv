@@ -1,0 +1,17 @@
+property,value
+standardversion,https://rosstat.gov.ru/storage/mediabank/metodicheskie_rekomendacii_po_publikacii_otkrytyh_dannyh_versiya_3.0_0%20(1).pdf
+identifier,7708234640-percentagepersex3034th
+title,"Итоги социально-демографического обследования (микроперепись населения) 2015 года по показателю: население в процентах к итогу по полу, 30-34 года"
+description,"Количественные данные по населению (население в процентах к итогу по полу, 30-34 года)"
+creator,"Федеральная служба государаственной статистики"
+created,20180905
+modified,20161226
+subject,"Микроперепись, микроперепись населения, микроперепись населения 2015, статистика населения, перепись 2015, население в процентах к итогу по полу, 30-34 года"
+format,CSV
+provenance,"Первичная публикация 1.0"
+valid,20301231
+publishername,"Воронин Владимир Михайлович"
+publisherphone,+74956074287
+publishermbox,Voronin@gks.ru
+data-20161226T1712-structure-20161225T1712.csv,https://rosstat.gov.ru/opendata/7708234640-percentagepersex3034th/data-20161226T1712-structure-20161225T1712.csv
+structure-20161225T1712.csv,https://rosstat.gov.ru/opendata/7708234640-percentagepersex3034th/structure-20161225T1712.csv

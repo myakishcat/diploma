@@ -1,0 +1,17 @@
+property,value
+standardversion,https://rosstat.gov.ru/storage/mediabank/metodicheskie_rekomendacii_po_publikacii_otkrytyh_dannyh_versiya_3.0_0%20(1).pdf
+identifier,7708234640-VSHP2016166
+title,"КОЛИЧЕСТВО ЗЕМЕЛЬНЫХ УЧАСТКОВ В НЕКОММЕРЧЕСКИХ ОБЪЕДИНЕНИЯХ ГРАЖДАН"
+description,"Источник: Итоги Всероссийской сельскохозяйственной переписи 2016 г.Том 2. Число объектов Всероссийской сельскохозяйственной переписи 2016 года. Трудовые ресурсы и их характеристика. http://www.gks.ru/free_doc/new_site/business/sx/vsxp2016/VSXP_2016_T_2_web.pdf"
+creator,Росстат
+created,20191213
+modified,20181211
+subject,"Всероссийская сельскохозяйственная перепись 2016,Всероссийская сельскохозяйственная перепись, перепись 2016,перепись,статистика сельского хозяйства"
+format,XML
+provenance,"Первичная публикация"
+valid,20301231
+publishername,"Демидов Кирилл Юрьевич"
+publisherphone,+74956329209
+publishermbox,demidovky@gks.ru
+data-20181211T1012-structure-20181211T1012.xml,https://rosstat.gov.ru/opendata/7708234640-VSHP2016166/data-20181211T1012-structure-20181211T1012.xml
+structure-20181211T1012.xsd,https://rosstat.gov.ru/opendata/7708234640-VSHP2016166/structure-20181211T1012.xsd

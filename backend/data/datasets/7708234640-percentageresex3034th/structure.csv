@@ -1,0 +1,3 @@
+field_name,russian_description,english_description,format
+col1,Описание 1,,string
+col2,Описание 2,,integer
