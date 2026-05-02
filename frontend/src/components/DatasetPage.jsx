@@ -79,53 +79,83 @@ export default function DatasetPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px' }}>
             {Object.entries(stats).map(([colName, colStats]) => (
               <div key={colName} style={{ border: '1px solid #555', padding: '12px', borderRadius: '8px' }}>
-              
                 <h4>{colName} ({colStats.type})</h4>
-                <p>Количество значений: {colStats.count}</p>
-                <p>Уникальных значений: {colStats.unique}</p>
-                <p>Пропусков: {colStats.nulls}</p>
-                {colStats.type === "numeric" && (
-                  <>
-                    <p>Минимум: {colStats.min}</p>
-                    <p>Максимум: {colStats.max}</p>
-                    <p>Среднее: {colStats.mean?.toFixed(2)}</p>
-                    <p>Медиана: {colStats.median?.toFixed(2)}</p>
-                    <div>
-                      <strong>Гистограмма:</strong>
-                      <div style={{ display: "flex", alignItems: "flex-end", gap: 2, marginTop: 8 }}>
-                        {colStats.histogram?.map((bucket, idx) => {
-                          const height = (bucket.count / colStats.count) * 100; // процент от общего числа
-                          return (
-                            <div key={idx} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}>
-                              <div style={{ backgroundColor: "#4caf50", width: "100%", height: `${height}px`, minHeight: "2px" }} />
-                              <span style={{ fontSize: "10px" }}>{bucket.bucket_start.toFixed(0)}</span>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  </>
-                )}
 
-                {colStats.type === "categorical" && colStats.unique <= 5 && colStats.top_values && (() => {
-                const filtered = colStats.top_values.filter(v => v.count > 0);
-                if (filtered.length < 2) return null;
-                return (
-                  <div style={{ marginTop: 12 }}>
-                    <strong>Распределение (круговая диаграмма):</strong>
-                    <PieChart data={filtered} width={200} height={200} />
-                    <div style={{ fontSize: '12px', marginTop: 8, display: 'flex', flexWrap: 'wrap', gap: 12 }}>
-                      {filtered.map((item, idx) => (
-                        <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                          <span style={{ display: 'inline-block', width: 12, height: 12, backgroundColor: `hsl(${idx * 60}, 70%, 50%)` }}></span>
-                          <span>{item.value}: {item.percent}%</span>
-                        </div>
-                      ))}
-                    </div>
+                {/* ДВЕ КОЛОНКИ ДЛЯ ТЕКСТОВОЙ СТАТИСТИКИ */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+                  {/* Левая колонка: общая статистика */}
+                  <div>
+                    <p>Количество значений: {colStats.count}</p>
+                    <p>Уникальных значений: {colStats.unique}</p>
+                    <p>Пропусков: {colStats.nulls}</p>
                   </div>
-                );
-                })()}
+
+                  {/* Правая колонка: специфические числовые метрики (только текст) */}
+                  <div>
+                    {colStats.type === "numeric" && (
+                      <>
+                        <p>Минимум: {colStats.min}</p>
+                        <p>Максимум: {colStats.max}</p>
+                        <p>Среднее: {colStats.mean?.toFixed(2)}</p>
+                        <p>Медиана: {colStats.median?.toFixed(2)}</p>
+                      </>
+                    )}
+                    {colStats.type === "categorical" && (
+                      <p>—</p> // или можно вывести что-то ещё, например, топ-3 значения
+                    )}
+                  </div>
+                </div>
+
+                {/* ДИАГРАММА НА ВСЮ ШИРИНУ (ПОД КОЛОНКАМИ) */}
+                <div style={{ marginTop: '8px' }}>
+                  {colStats.type === "numeric" && (
+                    <div>
+                      <strong>Распределение:</strong>
+                      
+                      <div style={{ display: "flex", alignItems: "flex-end", gap: 2, marginTop: 8 }}>
+                        {(() => {
+                          // Находим максимальное значение count среди всех bucket'ов
+                          const maxCount = Math.max(...(colStats.histogram?.map(b => b.count) || [0]));
+                          const maxHeight = 150; // желаемая высота самого высокого столбца (пиксели)
+                          return colStats.histogram?.map((bucket, idx) => {
+                            // Высота пропорциональна count относительно maxCount
+                            const height = maxCount === 0 ? 0 : (bucket.count / maxCount) * maxHeight;
+                            return (
+                              <div key={idx} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}>
+                                <div style={{ backgroundColor: "#4caf50", width: "100%", height: `${height}px`, minHeight: "2px" }} />
+                                <span style={{ fontSize: "10px" }}>{bucket.bucket_start.toFixed(0)}</span>
+                              </div>
+                            );
+                          });
+                        })()}
+                      </div>
+
+                    </div>
+                  )}
+
+                  {colStats.type === "categorical" && colStats.unique <= 5 && colStats.top_values && (() => {
+                    const filtered = colStats.top_values.filter(v => v.count > 0);
+                    if (filtered.length < 2) return null;
+                    return (
+                      <div>
+                        <strong>Распределение:</strong>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+                          <PieChart data={filtered} width={200} height={200} />
+                          <div style={{ fontSize: '12px', display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '12px' }}>
+                            {filtered.map((item, idx) => (
+                              <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                <span style={{ display: 'inline-block', width: 12, height: 12, backgroundColor: `hsl(${idx * 60}, 70%, 50%)` }} />
+                                <span>{item.value}: {item.percent}%</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })()}
+                </div>
               </div>
+
             ))}
           </div>
         </>
