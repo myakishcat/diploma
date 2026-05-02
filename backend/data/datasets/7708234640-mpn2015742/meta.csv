@@ -1,0 +1,17 @@
+property,value
+standardversion,https://rosstat.gov.ru/storage/mediabank/metodicheskie_rekomendacii_po_publikacii_otkrytyh_dannyh_versiya_4.0.pdf
+identifier,7708234640-mpn2015742
+title,"Численность населения в возрасте 15-72 лет, имеющего начальное профессиональное образование"
+description,"Количественные данные по населению (начальное профессиональное, 15 – 72 лет)"
+creator,"Федеральная служба государаственной статистики"
+created,20180905
+modified,20161226
+subject,"Микроперепись, микроперепись населения, микроперепись населения 2015, статистика населения, перепись 2015, начальное профессиональное, 15 72 лет"
+format,CSV
+provenance,"Первичная публикация 1.0"
+valid,20301231
+publishername,"Воронин Владимир Михайлович"
+publisherphone,+74956074287
+publishermbox,voronin@gks.ru
+data-20161226T1512-structure-20161225T1512.csv,https://rosstat.gov.ru/opendata/7708234640-mpn2015742/data-20161226T1512-structure-20161225T1512.csv
+structure-20161225T1512.csv,https://rosstat.gov.ru/opendata/7708234640-mpn2015742/structure-20161225T1512.csv

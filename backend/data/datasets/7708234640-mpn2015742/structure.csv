@@ -1,0 +1,5 @@
+field_name,russian description,english description,format
+value,"Значение показателя. Пустое значение означает отсутствие такой комбинации признаков","Measure value. Empty value means there is no such dimension combination",int
+area,"Территория (Российская федерация, федеральный округ, субъект Российской федерации)","Territory (Russian Federation, federal district, state of Russian Federation)",string
+urban,"Тип населенного пункта, к которому относится значение показателя (городское/сельское)","Settlement type of measure value (urban/rural)",string
+gender,Пол населения,Gender type,string

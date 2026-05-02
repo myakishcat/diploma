@@ -23,6 +23,11 @@ class DatasetMetadata(BaseModel):
     created: Optional[str] = None
     modified: Optional[str] = None
     subject: Optional[str] = None
+    provenance: Optional[str] = None           
+    valid: Optional[str] = None                
+    publishername: Optional[str] = None        
+    publisherphone: Optional[str] = None       
+    publishermbox: Optional[str] = None        
     structure_path: Optional[str] = None
     data_path: Optional[str] = None
     columns: Optional[List[ColumnStructure]] = None

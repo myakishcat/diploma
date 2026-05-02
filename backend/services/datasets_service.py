@@ -21,10 +21,6 @@ import traceback
 
 DATASETS_DIR = DATA_DIR / "datasets"
 
-
-# -------------------------------
-#        LIST DATASETS
-# -------------------------------
 def list_datasets() -> List[DatasetListItem]:
     df = read_list_csv()
     items: List[DatasetListItem] = []
@@ -42,9 +38,6 @@ def list_datasets() -> List[DatasetListItem]:
     return items
 
 
-# -------------------------------
-#        DATASET META
-# -------------------------------
 def get_dataset_meta(dataset_id: str) -> DatasetMetadata:
     ds_dir = DATASETS_DIR / dataset_id
 
@@ -91,7 +84,7 @@ def get_dataset_meta(dataset_id: str) -> DatasetMetadata:
         valid=meta.get("valid"),
         publishername=meta.get("publishername"),
         publisherphone=meta.get("publisherphone"),
-        publisherbox=meta.get("publisherbox"),
+        publishermbox=meta.get("publishermbox"),        
         structure_path=str(ds_dir / "structure.csv"),
         data_path=str(ds_dir / "data.csv"),
         columns=columns
@@ -99,9 +92,6 @@ def get_dataset_meta(dataset_id: str) -> DatasetMetadata:
 
 
 
-# -------------------------------
-#        DATASET ROWS
-# -------------------------------
 def get_rows(dataset_id: str, offset: int = 0, limit: int = 50) -> Dict[str, Any]:
     ds_dir = DATASETS_DIR / dataset_id
 
