@@ -65,18 +65,104 @@
     "type": "categorical",
     "count": 822,
     "unique": 92,
-    "nulls": 0
+    "nulls": 0,
+    "top_values": [
+      {
+        "value": "Российская Федерация",
+        "count": 9,
+        "percent": 1.09
+      },
+      {
+        "value": "Центральный федеральный округ",
+        "count": 9,
+        "percent": 1.09
+      },
+      {
+        "value": "Белгородская область",
+        "count": 9,
+        "percent": 1.09
+      },
+      {
+        "value": "Брянская область",
+        "count": 9,
+        "percent": 1.09
+      },
+      {
+        "value": "Владимирская область",
+        "count": 9,
+        "percent": 1.09
+      },
+      {
+        "value": "Воронежская область",
+        "count": 9,
+        "percent": 1.09
+      },
+      {
+        "value": "Ивановская область",
+        "count": 9,
+        "percent": 1.09
+      },
+      {
+        "value": "Калужская область",
+        "count": 9,
+        "percent": 1.09
+      },
+      {
+        "value": "Костромская область",
+        "count": 9,
+        "percent": 1.09
+      },
+      {
+        "value": "Курская область",
+        "count": 9,
+        "percent": 1.09
+      }
+    ]
   },
   "urban": {
     "type": "categorical",
     "count": 822,
     "unique": 3,
-    "nulls": 0
+    "nulls": 0,
+    "top_values": [
+      {
+        "value": "Городское и сельское население",
+        "count": 276,
+        "percent": 33.58
+      },
+      {
+        "value": "Городское население",
+        "count": 273,
+        "percent": 33.21
+      },
+      {
+        "value": "Сельское население",
+        "count": 273,
+        "percent": 33.21
+      }
+    ]
   },
   "gender": {
     "type": "categorical",
     "count": 822,
     "unique": 3,
-    "nulls": 0
+    "nulls": 0,
+    "top_values": [
+      {
+        "value": "Оба пола",
+        "count": 274,
+        "percent": 33.33
+      },
+      {
+        "value": "Мужчины",
+        "count": 274,
+        "percent": 33.33
+      },
+      {
+        "value": "Женщины",
+        "count": 274,
+        "percent": 33.33
+      }
+    ]
   }
 }

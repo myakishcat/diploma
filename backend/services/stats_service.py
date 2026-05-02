@@ -99,11 +99,22 @@ def compute_and_save_stats(dataset_id: str) -> Dict[str, Any]:
                 **numeric_stats
             }
         else:
-            # пока для категориальных просто сохраним базовое
+            value_counts = series.value_counts(dropna=False).head(10)  # топ-10, но нам хватит всех, если unique ≤5
+            total_non_null = len(series.dropna())
+            top_values = []
+            for val, cnt in value_counts.items():
+                percent = (cnt / total_non_null * 100) if total_non_null > 0 else 0
+                val_str = "NaN" if pd.isna(val) else str(val)
+                top_values.append({
+                    "value": val_str,
+                    "count": int(cnt),
+                    "percent": round(percent, 2)
+                })
+
             stats[col] = {
                 "type": "categorical",
-                **base_stats
-                # позже добавим top_values
+                **base_stats,
+                "top_values": top_values
             }
     
     # Сохраняем в JSON
