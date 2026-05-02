@@ -1,0 +1,82 @@
+{
+  "value": {
+    "type": "numeric",
+    "count": 822,
+    "unique": 689,
+    "nulls": 0,
+    "min": 19.0,
+    "max": 152594.0,
+    "mean": 2222.065693430657,
+    "median": 709.0,
+    "histogram": [
+      {
+        "bucket_start": 19.0,
+        "bucket_end": 15276.5,
+        "count": 802
+      },
+      {
+        "bucket_start": 15276.5,
+        "bucket_end": 30534.0,
+        "count": 10
+      },
+      {
+        "bucket_start": 30534.0,
+        "bucket_end": 45791.5,
+        "count": 4
+      },
+      {
+        "bucket_start": 45791.5,
+        "bucket_end": 61049.0,
+        "count": 1
+      },
+      {
+        "bucket_start": 61049.0,
+        "bucket_end": 76306.5,
+        "count": 2
+      },
+      {
+        "bucket_start": 76306.5,
+        "bucket_end": 91564.0,
+        "count": 2
+      },
+      {
+        "bucket_start": 91564.0,
+        "bucket_end": 106821.5,
+        "count": 0
+      },
+      {
+        "bucket_start": 106821.5,
+        "bucket_end": 122079.0,
+        "count": 0
+      },
+      {
+        "bucket_start": 122079.0,
+        "bucket_end": 137336.5,
+        "count": 0
+      },
+      {
+        "bucket_start": 137336.5,
+        "bucket_end": 152594.0,
+        "count": 1
+      }
+    ]
+  },
+  "area": {
+    "type": "categorical",
+    "count": 822,
+    "unique": 92,
+    "nulls": 0
+  },
+  "urban": {
+    "type": "categorical",
+    "count": 822,
+    "unique": 3,
+    "nulls": 0
+  },
+  "gender": {
+    "type": "categorical",
+    "count": 822,
+    "unique": 3,
+    "nulls": 0
+  }
+}

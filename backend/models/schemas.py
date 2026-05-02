@@ -38,3 +38,22 @@ class PaginatedData(BaseModel):
     offset: int
     limit: int
     rows: List[Dict[str, Any]]
+
+class NumericColumnStats(BaseModel):
+    type: str = "numeric"
+    count: int
+    unique: int
+    nulls: int
+    min: Optional[float] = None
+    max: Optional[float] = None
+    mean: Optional[float] = None
+    median: Optional[float] = None
+    histogram: List[Dict[str, Any]] = []
+
+class CategoricalColumnStats(BaseModel):
+    type: str = "categorical"
+    count: int
+    unique: int
+    nulls: int
+    # top_values: Optional[List[Dict]] = None  # на будущее
+

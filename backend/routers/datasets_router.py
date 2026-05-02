@@ -6,16 +6,13 @@ from services.datasets_service import (
     get_dataset_meta,
     get_rows,
 )
-
+from services.stats_service import get_stats
 from models.schemas import DatasetListItem, DatasetMetadata
 
 
 router = APIRouter()
 
 
-# -------------------------
-#   LIST DATASETS
-# -------------------------
 @router.get("/", response_model=List[DatasetListItem])
 def api_list_datasets():
     try:
@@ -24,9 +21,6 @@ def api_list_datasets():
         raise HTTPException(status_code=500, detail=str(e))
 
 
-# -------------------------
-#   DATASET META
-# -------------------------
 @router.get("/{dataset_id}", response_model=DatasetMetadata)
 def api_get_dataset_meta(dataset_id: str):
     try:
@@ -37,9 +31,6 @@ def api_get_dataset_meta(dataset_id: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-# -------------------------
-#   DATASET ROWS
-# -------------------------
 @router.get("/{dataset_id}/rows")
 def api_get_rows(
     dataset_id: str,
@@ -48,6 +39,17 @@ def api_get_rows(
 ):
     try:
         return get_rows(dataset_id, offset, limit)
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="Dataset not found")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/{dataset_id}/stats")
+def api_get_dataset_stats(dataset_id: str, recompute: bool = False):
+    try:
+        stats = get_stats(dataset_id, force_recompute=recompute)
+        return stats
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="Dataset not found")
     except Exception as e:
