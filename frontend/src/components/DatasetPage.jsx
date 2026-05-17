@@ -1,16 +1,25 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import PieChart from './PieChart';
 
 export default function DatasetPage() {
   const { id } = useParams();
+
   const [meta, setMeta] = useState(null);
-  const [rowsData, setRowsData] = useState(null);
+  const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState(null);
-  const [stats, setStats] = useState(null);
-  
 
+  const [rows, setRows] = useState([]);
+  const [totalRows, setTotalRows] = useState(0);
+  const [offset, setOffset] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingRows, setLoadingRows] = useState(false);
+  const isLoadingRef = useRef(false);
+  const tableContainerRef = useRef(null);
+  const LIMIT = 50;
+
+  // Загрузка статистики
   useEffect(() => {
     async function loadStats() {
       if (!id) return;
@@ -26,20 +35,21 @@ export default function DatasetPage() {
     loadStats();
   }, [id]);
 
+  // Загрузка метаданных
   useEffect(() => {
-    async function load() {
+    async function loadMeta() {
       setLoading(true);
+      setErr(null);
+      setRows([]);
+      setOffset(0);
+      setHasMore(true);
+      setTotalRows(0);
+      isLoadingRef.current = false;
       try {
         const metaRes = await fetch(`http://127.0.0.1:8000/api/datasets/${encodeURIComponent(id)}`);
         if (!metaRes.ok) throw new Error(`Meta HTTP ${metaRes.status}`);
         const metaJson = await metaRes.json();
-
-        const rowsRes = await fetch(`http://127.0.0.1:8000/api/datasets/${encodeURIComponent(id)}/rows?offset=0&limit=20`);
-        if (!rowsRes.ok) throw new Error(`Rows HTTP ${rowsRes.status}`);
-        const rowsJson = await rowsRes.json();
-
         setMeta(metaJson);
-        setRowsData(rowsJson);
       } catch (e) {
         console.error("Load dataset error:", e);
         setErr(String(e));
@@ -47,31 +57,80 @@ export default function DatasetPage() {
         setLoading(false);
       }
     }
-    load();
+    loadMeta();
   }, [id]);
 
+  // Загрузка строк (пагинация)
+  const loadMoreRows = useCallback(async () => {
+    if (isLoadingRef.current || !hasMore) return;
+    isLoadingRef.current = true;
+    setLoadingRows(true);
+    try {
+      const url = `http://127.0.0.1:8000/api/datasets/${encodeURIComponent(id)}/rows?offset=${offset}&limit=${LIMIT}`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`Rows HTTP ${res.status}`);
+      const data = await res.json();
+      const newRows = data.rows || [];
+      setRows(prev => [...prev, ...newRows]);
+      setTotalRows(data.total_rows);
+      const newOffset = offset + LIMIT;
+      setOffset(newOffset);
+      if (newOffset >= data.total_rows || newRows.length < LIMIT) {
+        setHasMore(false);
+      }
+    } catch (e) {
+      console.error("Load rows error:", e);
+      setErr(e.message);
+    } finally {
+      setLoadingRows(false);
+      isLoadingRef.current = false;
+    }
+  }, [id, offset, hasMore]);
+
+  // Первая загрузка строк
+  useEffect(() => {
+    if (!loading && meta && rows.length === 0 && hasMore) {
+      loadMoreRows();
+    }
+  }, [loading, meta, rows.length, hasMore, loadMoreRows]);
+
+  // Прокрутка для дозагрузки (вертикальная)
+  useEffect(() => {
+    const container = tableContainerRef.current;
+    if (!container) return;
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = container;
+      if (scrollHeight - scrollTop - clientHeight < 50 && !loadingRows && hasMore && !isLoadingRef.current) {
+        loadMoreRows();
+      }
+    };
+    container.addEventListener('scroll', handleScroll);
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, [loadingRows, hasMore, loadMoreRows]);
+
+  const getColumnHeaders = () => {
+    if (!meta || !meta.columns) return [];
+    return meta.columns.map(col => {
+      const field = col.field_name;
+      let dataType = col.format;
+      if (!dataType && stats && stats[field]) {
+        dataType = stats[field].type;
+      }
+      const description = col.russian_description || '';
+      const title = col.russian_description || field;
+      return { field, title, dataType, description };
+    });
+  };
+  const headers = getColumnHeaders();
 
   if (loading) return <div style={{ padding: 40, color: "white" }}>Загрузка...</div>;
   if (err) return <div style={{ padding: 40, color: "red" }}>Ошибка: {err}</div>;
   if (!meta) return <div style={{ padding: 40, color: "white" }}>Метаданные не найдены</div>;
 
   return (
-    <div style={{ padding: 40, color: "white" }}>
+    <div className="dataset-page-container" style={{ padding: '40px' }}>
       <h1>{meta.title || meta.identifier}</h1>
       <p style={{ opacity: 0.8 }}>{meta.description}</p>
-
-      <h3>Структура колонок</h3>
-      <ul>
-        {Array.isArray(meta.columns) && meta.columns.length ? (
-          meta.columns.map(c => (
-            <li key={c.field_name}>
-              <b>{c.field_name}</b> — {c.russian_description || c.english_description || c.format}
-            </li>
-          ))
-        ) : (
-          <li>Нет описания колонок</li>
-        )}
-      </ul>
 
       {stats && (
         <>
@@ -80,17 +139,12 @@ export default function DatasetPage() {
             {Object.entries(stats).map(([colName, colStats]) => (
               <div key={colName} style={{ border: '1px solid #555', padding: '12px', borderRadius: '8px' }}>
                 <h4>{colName} ({colStats.type})</h4>
-
-                {/* ДВЕ КОЛОНКИ ДЛЯ ТЕКСТОВОЙ СТАТИСТИКИ */}
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
-                  {/* Левая колонка: общая статистика */}
                   <div>
                     <p>Количество значений: {colStats.count}</p>
                     <p>Уникальных значений: {colStats.unique}</p>
                     <p>Пропусков: {colStats.nulls}</p>
                   </div>
-
-                  {/* Правая колонка: специфические числовые метрики (только текст) */}
                   <div>
                     {colStats.type === "categorical" && (
                       <>
@@ -112,20 +166,15 @@ export default function DatasetPage() {
                     )}
                   </div>
                 </div>
-
-                {/* ДИАГРАММА НА ВСЮ ШИРИНУ (ПОД КОЛОНКАМИ) */}
                 <div style={{ marginTop: '8px' }}>
                   {colStats.type === "numeric" && (
                     <div>
                       <strong>Распределение:</strong>
-                      
                       <div style={{ display: "flex", alignItems: "flex-end", gap: 2, marginTop: 8 }}>
                         {(() => {
-                          // Находим максимальное значение count среди всех bucket'ов
                           const maxCount = Math.max(...(colStats.histogram?.map(b => b.count) || [0]));
-                          const maxHeight = 150; // желаемая высота самого высокого столбца (пиксели)
+                          const maxHeight = 150;
                           return colStats.histogram?.map((bucket, idx) => {
-                            // Высота пропорциональна count относительно maxCount
                             const height = maxCount === 0 ? 0 : (bucket.count / maxCount) * maxHeight;
                             return (
                               <div key={idx} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}>
@@ -136,10 +185,8 @@ export default function DatasetPage() {
                           });
                         })()}
                       </div>
-
                     </div>
                   )}
-
                   {colStats.type === "categorical" && colStats.unique <= 5 && colStats.top_values && (() => {
                     const filtered = colStats.top_values.filter(v => v.count > 0);
                     if (filtered.length < 2) return null;
@@ -162,16 +209,53 @@ export default function DatasetPage() {
                   })()}
                 </div>
               </div>
-
             ))}
           </div>
         </>
       )}
 
-      <h3>Данные (первые строки)</h3>
-      <pre style={{ background: "#222", padding: 12, borderRadius: 8 }}>
-        {JSON.stringify(rowsData?.rows ?? [], null, 2)}
-      </pre>
+      <h3>Данные</h3>
+      <div className="dataset-table-wrapper" ref={tableContainerRef}>
+        <div className="dataset-table-inner">
+          <table className="dataset-table">
+            <thead>
+              <tr>
+                {headers.map(header => (
+                  <th key={header.field}>{header.title}</th>
+                ))}
+              </tr>
+              <tr>
+                {headers.map(header => (
+                  <th key={`type-${header.field}`} style={{ fontWeight: 'normal', fontSize: '12px', color: '#aaa' }}>
+                    {header.dataType || '—'}
+                  </th>
+                ))}
+              </tr>
+              <tr>
+                {headers.map(header => (
+                  <th key={`desc-${header.field}`} style={{ fontWeight: 'normal', fontSize: '12px', color: '#ccc' }}>
+                    {header.description || '—'}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row, idx) => (
+                <tr key={idx} style={{ borderBottom: '1px solid #333' }}>
+                  {headers.map(header => (
+                    <td key={header.field}>
+                      {row[header.field] !== undefined && row[header.field] !== null ? row[header.field] : '—'}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        {loadingRows && <div style={{ textAlign: 'center', padding: '20px', color: '#aaa' }}>Загрузка следующих строк...</div>}
+        {!hasMore && rows.length > 0 && <div style={{ textAlign: 'center', padding: '20px', color: '#aaa' }}>Все строки загружены (всего {totalRows})</div>}
+        {!hasMore && rows.length === 0 && <div style={{ textAlign: 'center', padding: '20px', color: '#aaa' }}>Нет данных для отображения</div>}
+      </div>
     </div>
   );
 }

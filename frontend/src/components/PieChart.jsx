@@ -17,7 +17,7 @@ export default function PieChart({ data, width = 200, height = 200 }) {
 
     ctx.clearRect(0, 0, width, height);
 
-    let startAngle = -Math.PI / 2; // начинаем сверху
+    let startAngle = -Math.PI / 2; 
     for (let i = 0; i < data.length; i++) {
       const angle = (data[i].count / total) * Math.PI * 2;
       const endAngle = startAngle + angle;

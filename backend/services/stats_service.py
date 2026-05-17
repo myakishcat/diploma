@@ -1,4 +1,3 @@
-# backend/services/stats_service.py
 import json
 import pandas as pd
 import numpy as np
@@ -99,7 +98,7 @@ def compute_and_save_stats(dataset_id: str) -> Dict[str, Any]:
                 **numeric_stats
             }
         else:
-            value_counts = series.value_counts(dropna=False).head(10)  # топ-10, но нам хватит всех, если unique ≤5
+            value_counts = series.value_counts(dropna=False).head(10)
             total_non_null = len(series.dropna())
             top_values = []
             for val, cnt in value_counts.items():
@@ -117,7 +116,6 @@ def compute_and_save_stats(dataset_id: str) -> Dict[str, Any]:
                 "top_values": top_values
             }
     
-    # Сохраняем в JSON
     stats_path = ds_dir / "stats.json"
     with open(stats_path, "w", encoding="utf-8") as f:
         json.dump(stats, f, ensure_ascii=False, indent=2)
