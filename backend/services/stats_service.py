@@ -78,6 +78,8 @@ def compute_and_save_stats(dataset_id: str) -> Dict[str, Any]:
         raise FileNotFoundError(f"Dataset directory not found: {ds_dir}")
     
     df = read_data_csv(ds_dir, "data.csv")
+    # Заменяем пустые строки и '-' на NaN, чтобы они считались пропусками
+    df = df.replace(['', ' ', '-'], np.nan)
     if df.empty:
         raise ValueError("DataFrame is empty")
     
@@ -98,14 +100,16 @@ def compute_and_save_stats(dataset_id: str) -> Dict[str, Any]:
                 **numeric_stats
             }
         else:
+            # Считаем частоты, исключая NaN (пропуски)
             value_counts = series.value_counts(dropna=False).head(10)
             total_non_null = len(series.dropna())
             top_values = []
             for val, cnt in value_counts.items():
+                if pd.isna(val):
+                    continue  # пропускаем NaN, т.к. они уже учтены в nulls
                 percent = (cnt / total_non_null * 100) if total_non_null > 0 else 0
-                val_str = "NaN" if pd.isna(val) else str(val)
                 top_values.append({
-                    "value": val_str,
+                    "value": str(val),
                     "count": int(cnt),
                     "percent": round(percent, 2)
                 })

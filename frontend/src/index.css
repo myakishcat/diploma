@@ -89,27 +89,88 @@ table {
   box-sizing: border-box;
 }
 
-/* Контейнер таблицы: управляет прокруткой */
+/* Контейнер таблицы — горизонтальная и вертикальная прокрутка */
 .dataset-table-wrapper {
   max-height: 500px;
-  overflow: auto; /* вертикальный + горизонтальный скролл */
+  overflow: auto;
   border: 1px solid #444;
   border-radius: 8px;
   width: 100%;
 }
 
-/* Внутренний блок, который заставляет горизонтальный скролл появляться */
+/* Внутренний блок для горизонтальной прокрутки */
 .dataset-table-inner {
   display: inline-block;
   min-width: 100%;
 }
 
-/* Таблица - подстраивается под содержимое */
+/* Сама таблица */
 .dataset-table {
   border-collapse: collapse;
   font-size: 14px;
-  /* Не задаем ширину - она определится содержимым */
 }
+
+/* Шапка — прилипает, непрозрачный фон, высокий z-index */
+.dataset-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background-color: #1e1e2f;  /* полностью непрозрачный */
+}
+
+/* Тело таблицы — ниже по z-index */
+.dataset-table tbody {
+  position: relative;
+  z-index: 1;
+}
+
+/* Все ячейки шапки — фон и нижняя граница */
+.dataset-table thead th {
+  background-color: #1e1e2f;
+  border-bottom: 1px solid #555;  /* линия между строками и после шапки */
+  padding: 8px 10px;
+  text-align: left;
+  white-space: nowrap;
+  line-height: 20px;
+  vertical-align: middle;
+  box-sizing: border-box;
+}
+
+/* Первая строка шапки */
+.dataset-table thead tr:first-child th {
+  height: 36px;  /* 8+8+20 = 36 */
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+/* Вторая строка шапки (типы данных) */
+.dataset-table thead tr:nth-child(2) th {
+  height: 28px;  /* 4+4+20 = 28 */
+  padding-top: 4px;
+  padding-bottom: 4px;
+  font-weight: normal;
+  font-size: 12px;
+  color: #aaa;
+}
+
+/* Третья строка шапки (описания) */
+.dataset-table thead tr:nth-child(3) th {
+  height: 28px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  font-weight: normal;
+  font-size: 12px;
+  color: #ccc;
+}
+
+/* Ячейки тела таблицы */
+.dataset-table tbody td {
+  padding: 8px 10px;
+  white-space: nowrap;
+  border-bottom: 1px solid #333;
+}
+
+/* 
 
 .dataset-table th,
 .dataset-table td {
@@ -118,27 +179,40 @@ table {
   text-align: left;
 }
 
-/* Заголовки - sticky */
-.dataset-table thead tr:first-child th {
+
+.dataset-table thead {
   position: sticky;
   top: 0;
+  z-index: 10;
+}
+
+
+.dataset-table thead tr:first-child th {
   background-color: #1e1e2f;
-  box-shadow: inset 0 -1px 0 #555;
-  z-index: 2;
+  border-bottom: 1px solid #555;
+  padding: 8px 10px;
+  line-height: 20px;
+  height: 36px;
+  box-sizing: border-box;
+  vertical-align: middle;
 }
 
 .dataset-table thead tr:nth-child(2) th {
-  position: sticky;
-  top: 28px;
   background-color: #1e1e2f;
-  box-shadow: inset 0 -1px 0 #555;
-  z-index: 1;
+  border-bottom: 1px solid #555;
+  padding: 4px 10px;
+  line-height: 20px;
+  height: 28px;
+  box-sizing: border-box;
+  vertical-align: middle;
 }
 
 .dataset-table thead tr:nth-child(3) th {
-  position: sticky;
-  top: 56px;
   background-color: #1e1e2f;
-  box-shadow: inset 0 -1px 0 #555;
-  z-index: 1;
-}
+  border-bottom: 1px solid #555;
+  padding: 4px 10px;
+  line-height: 20px;
+  height: 28px;
+  box-sizing: border-box;
+  vertical-align: middle;
+} */

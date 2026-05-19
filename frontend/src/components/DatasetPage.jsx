@@ -226,14 +226,14 @@ export default function DatasetPage() {
               </tr>
               <tr>
                 {headers.map(header => (
-                  <th key={`type-${header.field}`} style={{ fontWeight: 'normal', fontSize: '12px', color: '#aaa' }}>
+                  <th key={`type-${header.field}`} >
                     {header.dataType || '—'}
                   </th>
                 ))}
               </tr>
               <tr>
                 {headers.map(header => (
-                  <th key={`desc-${header.field}`} style={{ fontWeight: 'normal', fontSize: '12px', color: '#ccc' }}>
+                  <th key={`desc-${header.field}`}>
                     {header.description || '—'}
                   </th>
                 ))}
