@@ -28,8 +28,13 @@ class DatasetMetadata(BaseModel):
     publishername: Optional[str] = None        
     publisherphone: Optional[str] = None       
     publishermbox: Optional[str] = None        
-    structure_path: Optional[str] = None
-    data_path: Optional[str] = None
+    format: Optional[str] = None
+    standardversion: Optional[str] = None
+    structure_path: Optional[str] = None        # локальный путь (опционально)
+    data_path: Optional[str] = None             # локальный путь (опционально)
+    # Добавьте два поля для ссылок из meta.csv:
+    data_url: Optional[str] = None              # ссылка на файл с данными
+    structure_url: Optional[str] = None         # ссылка на файл со структурой
     columns: Optional[List[ColumnStructure]] = None
 
 

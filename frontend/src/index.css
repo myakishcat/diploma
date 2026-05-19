@@ -237,3 +237,30 @@ button:focus-visible {
   font-size: 0.8rem;
   margin-top: 4px;
 }
+
+.back-button, .download-button {
+  background-color: #eef1f8;
+  color: #908dce;
+  border: 1px solid #cbd5e1;
+  padding: 8px 16px;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-radius: 40px;
+}
+.back-button:hover, .download-button:hover {
+  background-color: #e2e8f0;
+  border-color: #908dce;
+}
+.download-button {
+  background-color: #f6a0ac;
+  color: white;
+  border-color: #e47c9c;
+}
+.download-button:hover {
+  background-color: #e47c9c;
+  border-color: #908dce;
+}

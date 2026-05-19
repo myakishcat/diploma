@@ -50,6 +50,15 @@ def get_dataset_meta(dataset_id: str) -> DatasetMetadata:
     # meta.csv → словарь
     meta = {row["property"]: row["value"] for _, row in meta_df.iterrows()}
 
+    # Ищем ссылки на data и structure
+    data_url = None
+    structure_url = None
+    for key, value in meta.items():
+        if key.lower().startswith("data") and not key.lower().startswith("structure"):
+            data_url = value
+        elif key.lower().startswith("structure"):
+            structure_url = value
+
     # structure.csv → список колонок
     columns: List[ColumnStructure] = []
 
@@ -87,6 +96,8 @@ def get_dataset_meta(dataset_id: str) -> DatasetMetadata:
         publishermbox=meta.get("publishermbox"),        
         structure_path=str(ds_dir / "structure.csv"),
         data_path=str(ds_dir / "data.csv"),
+        data_url=data_url,
+        structure_url=structure_url,
         columns=columns
     )
 

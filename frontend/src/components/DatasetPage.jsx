@@ -1,8 +1,9 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef, useCallback } from "react";
 import PieChart, { SOFT_COLORS } from './PieChart';
 
 export default function DatasetPage() {
+  const navigate = useNavigate();
   const { id } = useParams();
 
   const [meta, setMeta] = useState(null);
@@ -18,6 +19,34 @@ export default function DatasetPage() {
   const isLoadingRef = useRef(false);
   const tableContainerRef = useRef(null);
   const LIMIT = 50;
+
+  // Функция поиска URL по префиксу в ключах метаданных
+  const getDownloadUrl = (prefix) => {
+    if (!meta) return null;
+    const key = Object.keys(meta).find(k => k.toLowerCase().startsWith(prefix.toLowerCase()));
+    return key ? meta[key] : null;
+  };
+
+  const dataUrl = getDownloadUrl('data_url');
+  const structureUrl = getDownloadUrl('structure_url');
+
+  // Функция скачивания файла
+  const handleDownload = (url, filename) => {
+    if (!url) return;
+
+    // Преобразуем относительный путь в абсолютный (если нужно)
+    let fullUrl = url;
+    if (url.startsWith('/')) {
+      fullUrl = `http://127.0.0.1:8000${url}`;
+    } else if (!url.startsWith('http')) {
+      fullUrl = `http://127.0.0.1:8000/${url}`;
+    }
+
+    // Открываем в новой вкладке – для внешних ссылок (https://rosstat.gov.ru/...) 
+    // это вызовет скачивание или отображение в зависимости от настроек сервера.
+    // Если ссылка ведёт на наш бэкенд, то браузер тоже начнёт скачивание (благодаря заголовкам).
+    window.open(fullUrl, '_blank');
+  };
 
   // Загрузка статистики
   useEffect(() => {
@@ -49,6 +78,7 @@ export default function DatasetPage() {
         const metaRes = await fetch(`http://127.0.0.1:8000/api/datasets/${encodeURIComponent(id)}`);
         if (!metaRes.ok) throw new Error(`Meta HTTP ${metaRes.status}`);
         const metaJson = await metaRes.json();
+        console.log('Meta data:', metaJson); // для отладки
         setMeta(metaJson);
       } catch (e) {
         console.error("Load dataset error:", e);
@@ -60,7 +90,7 @@ export default function DatasetPage() {
     loadMeta();
   }, [id]);
 
-  // Загрузка строк (пагинация)
+  // Загрузка строк (пагинация) – без изменений
   const loadMoreRows = useCallback(async () => {
     if (isLoadingRef.current || !hasMore) return;
     isLoadingRef.current = true;
@@ -94,7 +124,7 @@ export default function DatasetPage() {
     }
   }, [loading, meta, rows.length, hasMore, loadMoreRows]);
 
-  // Прокрутка для дозагрузки (вертикальная)
+  // Прокрутка для дозагрузки
   useEffect(() => {
     const container = tableContainerRef.current;
     if (!container) return;
@@ -123,15 +153,48 @@ export default function DatasetPage() {
   };
   const headers = getColumnHeaders();
 
-  if (loading) return <div style={{ padding: 40, color: "white" }}>Загрузка...</div>;
+  if (loading) return <div style={{ padding: 40 }}>Загрузка...</div>;
   if (err) return <div style={{ padding: 40, color: "red" }}>Ошибка: {err}</div>;
-  if (!meta) return <div style={{ padding: 40, color: "white" }}>Метаданные не найдены</div>;
+  if (!meta) return <div style={{ padding: 40 }}>Метаданные не найдены</div>;
 
   return (
     <div className="dataset-page-container" style={{ padding: '40px' }}>
-      <h1>{meta.title || meta.identifier}</h1>
+      {/* Верхняя панель с кнопками */}
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '24px',
+        flexWrap: 'wrap',
+        gap: '16px'
+      }}>
+        <button onClick={() => navigate('/')} className="back-button">
+          ← Вернуться к списку датасетов
+        </button>
+        <div style={{ display: 'flex', gap: '12px' }}>
+          {dataUrl && (
+            <button
+              onClick={() => handleDownload(dataUrl, `${meta.identifier || id}_data.csv`)}
+              className="download-button"
+            >
+              📥 Скачать датасет
+            </button>
+          )}
+          {structureUrl && (
+            <button
+              onClick={() => handleDownload(structureUrl, `${meta.identifier || id}_structure.csv`)}
+              className="download-button"
+            >
+              📄 Скачать структуру
+            </button>
+          )}
+        </div>
+      </div>
+
+      <h1 style={{ fontSize: '2rem', marginTop: '0' }}>{meta.title || meta.identifier}</h1>
       <p style={{ opacity: 0.8 }}>{meta.description}</p>
 
+      {/* Блок статистики – без изменений */}
       {stats && (
         <>
           <h3>Статистика по колонкам</h3>
@@ -219,25 +282,9 @@ export default function DatasetPage() {
         <div className="dataset-table-inner">
           <table className="dataset-table">
             <thead>
-              <tr>
-                {headers.map(header => (
-                  <th key={header.field}>{header.title}</th>
-                ))}
-              </tr>
-              <tr>
-                {headers.map(header => (
-                  <th key={`type-${header.field}`} >
-                    {header.dataType || '—'}
-                  </th>
-                ))}
-              </tr>
-              <tr>
-                {headers.map(header => (
-                  <th key={`desc-${header.field}`}>
-                    {header.description || '—'}
-                  </th>
-                ))}
-              </tr>
+              <tr>{headers.map(header => <th key={header.field}>{header.title}</th>)}</tr>
+              <tr>{headers.map(header => <th key={`type-${header.field}`}>{header.dataType || '—'}</th>)}</tr>
+              <tr>{headers.map(header => <th key={`desc-${header.field}`}>{header.description || '—'}</th>)}</tr>
             </thead>
             <tbody>
               {rows.map((row, idx) => (
@@ -252,9 +299,9 @@ export default function DatasetPage() {
             </tbody>
           </table>
         </div>
-        {loadingRows && <div style={{ textAlign: 'center', padding: '20px', color: '#aaa' }}>Загрузка следующих строк...</div>}
-        {!hasMore && rows.length > 0 && <div style={{ textAlign: 'center', padding: '20px', color: '#aaa' }}>Все строки загружены (всего {totalRows})</div>}
-        {!hasMore && rows.length === 0 && <div style={{ textAlign: 'center', padding: '20px', color: '#aaa' }}>Нет данных для отображения</div>}
+        {loadingRows && <div style={{ textAlign: 'center', padding: '20px' }}>Загрузка следующих строк...</div>}
+        {!hasMore && rows.length > 0 && <div style={{ textAlign: 'center', padding: '20px' }}>Все строки загружены (всего {totalRows})</div>}
+        {!hasMore && rows.length === 0 && <div style={{ textAlign: 'center', padding: '20px' }}>Нет данных для отображения</div>}
       </div>
     </div>
   );
