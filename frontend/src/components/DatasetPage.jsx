@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState, useRef, useCallback } from "react";
-import PieChart from './PieChart';
+import PieChart, { SOFT_COLORS } from './PieChart';
 
 export default function DatasetPage() {
   const { id } = useParams();
@@ -135,9 +135,9 @@ export default function DatasetPage() {
       {stats && (
         <>
           <h3>Статистика по колонкам</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
             {Object.entries(stats).map(([colName, colStats]) => (
-              <div key={colName} style={{ border: '1px solid #555', padding: '12px', borderRadius: '8px' }}>
+              <div key={colName} className="stats-card">
                 <h4>{colName} ({colStats.type})</h4>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
                   <div>
@@ -178,7 +178,7 @@ export default function DatasetPage() {
                             const height = maxCount === 0 ? 0 : (bucket.count / maxCount) * maxHeight;
                             return (
                               <div key={idx} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}>
-                                <div style={{ backgroundColor: "#4caf50", width: "100%", height: `${height}px`, minHeight: "2px" }} />
+                                <div style={{ backgroundColor: "#908DCE", width: "100%", height: `${height}px`, minHeight: "2px" }} />
                                 <span style={{ fontSize: "10px" }}>{bucket.bucket_start.toFixed(0)}</span>
                               </div>
                             );
@@ -198,7 +198,7 @@ export default function DatasetPage() {
                           <div style={{ fontSize: '12px', display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '12px' }}>
                             {filtered.map((item, idx) => (
                               <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                <span style={{ display: 'inline-block', width: 12, height: 12, backgroundColor: `hsl(${idx * 60}, 70%, 50%)` }} />
+                                <span style={{ display: 'inline-block', width: 12, height: 12, backgroundColor: SOFT_COLORS[idx % SOFT_COLORS.length] }} />
                                 <span>{item.value}: {item.percent}%</span>
                               </div>
                             ))}

@@ -3,9 +3,9 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color-scheme: light;
+  color: #2c3e50;
+  background-color: #eef1f8;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -15,22 +15,20 @@
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: #908dce;
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
+  color: #d99bd8;
 }
 
 body {
   overflow-x: hidden;
   margin: 0;
   padding: 0;
-  margin: 0;
-  /* display: flex;
-  place-items: center; */
   min-width: 320px;
   min-height: 100vh;
+  background-color: #eef1f8;
 }
 
 #root {
@@ -40,8 +38,14 @@ body {
 }
 
 h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  font-size: 2.8em;
+  line-height: 1.2;
+  color: #2c3e50;
+}
+
+h3 {
+  color: #2c3e50;
+  margin-top: 2rem;
 }
 
 button {
@@ -51,106 +55,132 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: #f6a0ac;
+  color: white;
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: background-color 0.25s, border-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  background-color: #e47c9c;
+  border-color: #908dce;
 }
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 4px auto #a1c3e7;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+@media (prefers-color-scheme: dark) {
+  /* оставляем светлую тему, можно игнорировать системную */
 }
 
-table {
-  display: table;
-  width: max-content;
-  min-width: 100%;
-}
-/* Обертка для страницы датасета - запрещаем расширение по горизонтали */
+/* Обертка страницы датасета */
 .dataset-page-container {
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
   box-sizing: border-box;
+  background-color: #eef1f8;
+  color: #2c3e50;
 }
 
-/* Контейнер таблицы — горизонтальная и вертикальная прокрутка */
+/* Карточка статистики */
+.stats-card {
+  background-color: white;
+  border: 1px solid #d0dae8;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.1s ease, box-shadow 0.2s;
+}
+.stats-card:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+.stats-card h4 {
+  margin-top: 0;
+  color: #908dce;
+  border-left: 4px solid #f6a0ac;
+  padding-left: 12px;
+}
+.stats-card p {
+  margin: 0.25rem 0;
+  font-size: 0.9rem;
+  color: #2c3e50;
+}
+/* .stats-card ul {
+  background-color: #fafafd;
+  border-radius: 12px;
+  padding: 8px 12px;
+} */
+.stats-card li {
+  font-size: 0.8rem;
+}
+
+/* Контейнер таблицы */
 .dataset-table-wrapper {
   max-height: 500px;
   overflow: auto;
-  border: 1px solid #444;
-  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  border-radius: 16px;
   width: 100%;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
-/* Внутренний блок для горизонтальной прокрутки */
 .dataset-table-inner {
   display: inline-block;
   min-width: 100%;
 }
 
-/* Сама таблица */
 .dataset-table {
   border-collapse: collapse;
   font-size: 14px;
+  width: 100%;
 }
 
-/* Шапка — прилипает, непрозрачный фон, высокий z-index */
-.dataset-table thead {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  background-color: #1e1e2f;  /* полностью непрозрачный */
-}
-
-/* Тело таблицы — ниже по z-index */
 .dataset-table tbody {
   position: relative;
   z-index: 1;
 }
 
-/* Все ячейки шапки — фон и нижняя граница */
+/* Шапка — прилипает, чуть темнее фона */
+.dataset-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background-color: #eef1f8;  /* или #e9edf2 для более явного отличия */
+}
+
+/* Все ячейки шапки */
 .dataset-table thead th {
-  background-color: #1e1e2f;
-  border-bottom: 1px solid #555;  /* линия между строками и после шапки */
-  padding: 8px 10px;
+  background-color: #eef1f8;
+  border-bottom: 1px solid #d0dae8;   /* более тёмная линия для контраста */
+  padding: 8px 12px;
   text-align: left;
   white-space: nowrap;
   line-height: 20px;
   vertical-align: middle;
   box-sizing: border-box;
+  color: #2c3e50;
 }
 
 /* Первая строка шапки */
 .dataset-table thead tr:first-child th {
-  height: 36px;  /* 8+8+20 = 36 */
+  height: 36px;
   padding-top: 8px;
   padding-bottom: 8px;
+  background-color: #e9edf2;   /* чуть темнее */
+  font-weight: 600;
 }
 
 /* Вторая строка шапки (типы данных) */
 .dataset-table thead tr:nth-child(2) th {
-  height: 28px;  /* 4+4+20 = 28 */
+  height: 28px;
   padding-top: 4px;
   padding-bottom: 4px;
   font-weight: normal;
   font-size: 12px;
-  color: #aaa;
+  color: #6c7a91;
+  background-color: #eef1f8;
 }
 
 /* Третья строка шапки (описания) */
@@ -160,59 +190,50 @@ table {
   padding-bottom: 4px;
   font-weight: normal;
   font-size: 12px;
-  color: #ccc;
+  color: #8d9ab0;
+  background-color: #eef1f8;
 }
 
-/* Ячейки тела таблицы */
 .dataset-table tbody td {
-  padding: 8px 10px;
+  padding: 8px 12px;
   white-space: nowrap;
-  border-bottom: 1px solid #333;
+  border-bottom: 1px solid #edf2f7;
+  color: #2c3e50;
 }
 
-/* 
-
-.dataset-table th,
-.dataset-table td {
-  padding: 8px 10px;
-  white-space: nowrap;
-  text-align: left;
+.dataset-table tbody tr:hover td {
+  background-color: #fef9e6;
 }
 
-
-.dataset-table thead {
-  position: sticky;
-  top: 0;
-  z-index: 10;
+/* Стили для списка датасетов */
+.dataset-list-container {
+  padding: 40px;
+  background-color: #eef1f8;
+  min-height: 100vh;
 }
-
-
-.dataset-table thead tr:first-child th {
-  background-color: #1e1e2f;
-  border-bottom: 1px solid #555;
-  padding: 8px 10px;
-  line-height: 20px;
-  height: 36px;
-  box-sizing: border-box;
-  vertical-align: middle;
+.dataset-list-item {
+  list-style: none;
+  margin-bottom: 16px;
+  background-color: white;
+  border-radius: 20px;
+  padding: 16px 20px;
+  transition: 0.1s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
-
-.dataset-table thead tr:nth-child(2) th {
-  background-color: #1e1e2f;
-  border-bottom: 1px solid #555;
-  padding: 4px 10px;
-  line-height: 20px;
-  height: 28px;
-  box-sizing: border-box;
-  vertical-align: middle;
+.dataset-list-item:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transform: translateY(-1px);
 }
-
-.dataset-table thead tr:nth-child(3) th {
-  background-color: #1e1e2f;
-  border-bottom: 1px solid #555;
-  padding: 4px 10px;
-  line-height: 20px;
-  height: 28px;
-  box-sizing: border-box;
-  vertical-align: middle;
-} */
+.dataset-list-item a {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #908dce;
+}
+.dataset-list-item a:hover {
+  color: #d99bd8;
+}
+.dataset-list-item .dataset-id {
+  color: #8d9ab0;
+  font-size: 0.8rem;
+  margin-top: 4px;
+}
