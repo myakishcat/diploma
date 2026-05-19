@@ -6,16 +6,33 @@ export default function DatasetList() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const formatDate = (isoDate) => {
+    if (!isoDate) return "—";
+    const parts = isoDate.split("-");
+    if (parts.length !== 3) return isoDate;
+    return `${parts[2]}.${parts[1]}.${parts[0]}`;
+  };
+
+  const formatFileSize = (kb) => {
+    if (!kb && kb !== 0) return "—";
+    if (kb < 1024) return `${kb} КБ`;
+    return `${(kb / 1024).toFixed(1)} МБ`;
+  };
+
+  const formatNumber = (num) => {
+    if (!num && num !== 0) return "—";
+    return num.toLocaleString("ru-RU");
+  };
+
   useEffect(() => {
     async function load() {
       try {
         const res = await fetch("http://127.0.0.1:8000/api/datasets/");
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
-        console.log("API /api/datasets response:", data);
         setItems(Array.isArray(data) ? data : []);
       } catch (e) {
-        console.error("Ошибка загрузки списка датасетов:", e);
+        console.error(e);
         setError(String(e));
         setItems([]);
       } finally {
@@ -33,12 +50,20 @@ export default function DatasetList() {
     <div className="dataset-list-container">
       <h1>Список датасетов</h1>
       <ul style={{ padding: 0 }}>
-        {items.map(item => (
+        {items.map((item) => (
           <li key={item.id} className="dataset-list-item">
-            <Link to={`/dataset/${encodeURIComponent(item.id)}`}>
-              {item.title || item.id}
-            </Link>
-            <div className="dataset-id">{item.id}</div>
+            <div className="dataset-title">
+              <Link to={`/dataset/${encodeURIComponent(item.id)}`}>
+                {item.title || item.id}
+              </Link>
+            </div>
+            <div className="dataset-meta-wrapper">
+              <div className="dataset-meta">
+                <span>{formatNumber(item.rows_count)} строк</span>
+                <span>Размер: {formatFileSize(item.file_size_kb)}</span>
+                <span>Обновлен: {formatDate(item.modified)}</span>
+              </div>
+            </div>
           </li>
         ))}
       </ul>

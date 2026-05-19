@@ -206,36 +206,66 @@ button:focus-visible {
 }
 
 /* Стили для списка датасетов */
-.dataset-list-container {
+/* .dataset-list-container {
   padding: 40px;
   background-color: #eef1f8;
   min-height: 100vh;
-}
+} */
+
 .dataset-list-item {
   list-style: none;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   background-color: white;
   border-radius: 20px;
-  padding: 16px 20px;
+  padding: 12px 20px;
   transition: 0.1s ease;
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
-.dataset-list-item:hover {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  transform: translateY(-1px);
+
+.dataset-title {
+  margin-bottom: 8px;
 }
-.dataset-list-item a {
-  font-size: 1.2rem;
+
+.dataset-title a {
+  font-size: 1.1rem;
   font-weight: 600;
   color: #908dce;
+  text-decoration: none;
 }
-.dataset-list-item a:hover {
+
+.dataset-title a:hover {
   color: #d99bd8;
 }
-.dataset-list-item .dataset-id {
-  color: #8d9ab0;
-  font-size: 0.8rem;
-  margin-top: 4px;
+
+.dataset-meta-wrapper {
+  display: flex;
+  justify-content: flex-end;  /* прижимаем содержимое к правому краю */
+}
+
+.dataset-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 0.85rem;
+  color: #6c7a91;
+  align-items: center;
+}
+
+.dataset-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .dataset-meta {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .dataset-meta span {
+    white-space: normal;
+  }
 }
 
 .back-button, .download-button {

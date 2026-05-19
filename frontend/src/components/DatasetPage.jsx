@@ -177,7 +177,7 @@ export default function DatasetPage() {
               onClick={() => handleDownload(dataUrl, `${meta.identifier || id}_data.csv`)}
               className="download-button"
             >
-              📥 Скачать датасет
+              Скачать датасет
             </button>
           )}
           {structureUrl && (
@@ -185,7 +185,7 @@ export default function DatasetPage() {
               onClick={() => handleDownload(structureUrl, `${meta.identifier || id}_structure.csv`)}
               className="download-button"
             >
-              📄 Скачать структуру
+              Скачать структуру
             </button>
           )}
         </div>

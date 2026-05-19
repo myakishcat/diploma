@@ -5,7 +5,7 @@ import chardet
 
 
 DATA_DIR = (Path(__file__).resolve().parents[1] / "data")
-
+INDEX_PATH = DATA_DIR / "datasets_index.json"
 
 # Читаем list.csv — список доступных датасетов
 def read_list_csv(path: Optional[str] = None) -> pd.DataFrame:

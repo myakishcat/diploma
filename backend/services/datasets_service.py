@@ -18,23 +18,37 @@ from models.schemas import (
 import pandas as pd
 import traceback
 
+import json
+from utils.file_reader import DATA_DIR, INDEX_PATH  # добавили INDEX_PATH
+
 
 DATASETS_DIR = DATA_DIR / "datasets"
 
 def list_datasets() -> List[DatasetListItem]:
-    df = read_list_csv()
+    """Возвращает список датасетов из datasets_index.json."""
+    if not INDEX_PATH.exists():
+        # Если индекса нет, возвращаем пустой список (или можно попробовать создать его на лету)
+        return []
+
+    with open(INDEX_PATH, 'r', encoding='utf-8') as f:
+        index_data = json.load(f)
+
     items: List[DatasetListItem] = []
-
-    for _, row in df.iterrows():
-        items.append(
-            DatasetListItem(
-                id=row["id"],
-                title=row["title"],
-                meta_path=row["meta_path"],
-                format=row["format"],
-            )
-        )
-
+    for item in index_data:
+        items.append(DatasetListItem(
+            id=item.get("id"),
+            title=item.get("title"),
+            meta_path=None, 
+            format=item.get("format", "csv"),
+            description=item.get("description"),
+            modified=item.get("modified"),
+            valid=item.get("valid"),
+            publishername=item.get("publishername"),
+            rows_count=item.get("rows_count"),
+            file_size_kb=item.get("file_size_kb"),
+            created=item.get("created"),
+            subject=item.get("subject"),
+        ))
     return items
 
 

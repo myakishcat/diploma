@@ -6,6 +6,15 @@ class DatasetListItem(BaseModel):
     title: str
     meta_path: Optional[str] = None
     format: Optional[str] = "csv"
+    # Новые поля (опциональные, для обратной совместимости)
+    description: Optional[str] = None
+    modified: Optional[str] = None
+    valid: Optional[str] = None
+    publishername: Optional[str] = None
+    rows_count: Optional[int] = None
+    file_size_kb: Optional[float] = None
+    created: Optional[str] = None
+    subject: Optional[str] = None
 
 
 class ColumnStructure(BaseModel):
@@ -60,5 +69,4 @@ class CategoricalColumnStats(BaseModel):
     count: int
     unique: int
     nulls: int
-    # top_values: Optional[List[Dict]] = None  # на будущее
 
