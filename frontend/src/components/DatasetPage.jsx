@@ -209,23 +209,18 @@ export default function DatasetPage() {
                     <p>Пропусков: {colStats.nulls}</p>
                   </div>
                   <div>
-                    {colStats.type === "categorical" && (
-                      <>
-                        {colStats.unique > 5 && colStats.top_values && (
-                          <div>
-                            <strong>Топ-10 значений:</strong>
-                            <ul style={{ margin: '8px 0 0 16px', padding: 0 }}>
-                              {colStats.top_values.slice(0, 10).map((item, idx) => (
-                                <li key={idx} style={{ fontSize: '12px', marginBottom: '4px', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: '8px' }}>
-                                  <span style={{ fontWeight: 'bold', flex: 1 }}>{item.value}</span>
-                                  <span style={{ color: '#aaa', whiteSpace: 'nowrap' }}>{item.percent}% ({item.count})</span>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        )}
-                        {colStats.unique <= 5 && <p>—</p>}
-                      </>
+                    {colStats.unique > 5 && colStats.top_values && (
+                      <div>
+                        <strong>Топ-5 значений:</strong>
+                        <ul style={{ margin: '8px 0 0 16px', padding: 0 }}>
+                          {colStats.top_values.slice(0, 5).map((item, idx) => (
+                            <li key={idx} style={{ fontSize: '12px', marginBottom: '4px', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: '8px' }}>
+                              <span style={{ fontWeight: 'bold', flex: 1 }}>{item.value}</span>
+                              <span style={{ color: '#aaa', whiteSpace: 'nowrap' }}>{item.percent}% ({item.count})</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -257,7 +252,7 @@ export default function DatasetPage() {
                       <div>
                         <strong>Распределение:</strong>
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-                          <PieChart data={filtered} width={200} height={200} />
+                          <PieChart data={filtered} width={150} height={150} />
                           <div style={{ fontSize: '12px', display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '12px' }}>
                             {filtered.map((item, idx) => (
                               <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
