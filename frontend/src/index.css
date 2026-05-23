@@ -294,3 +294,195 @@ button:focus-visible {
   background-color: #e47c9c;
   border-color: #908dce;
 }
+
+/* Двухколоночный макет для списка датасетов */
+.dataset-list-layout {
+  display: flex;
+  gap: 32px;
+  padding: 40px;
+  background-color: #eef1f8;
+  min-height: 100vh;
+}
+
+.filters-panel {
+  width: 280px;
+  flex-shrink: 0;
+  background-color: white;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  align-self: start;
+  position: sticky;
+  top: 20px;
+  box-sizing: border-box;
+  margin-top: 80px; /* отступ, равный высоте заголовка + его нижний отступ */
+}
+
+.filters-panel h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
+
+.filter-group {
+  margin-bottom: 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.filter-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #2c3e50;
+}
+
+.range-inputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.range-inputs input {
+  flex: 1;
+  min-width: 0;         /* предотвращает вылезание за пределы flex-контейнера */
+  padding: 8px 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  background-color: white;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.range-inputs input:focus {
+  outline: none;
+  border-color: #908dce;
+}
+
+.range-inputs span {
+  flex-shrink: 0;       /* не даёт сжиматься разделителю "–" */
+  color: #8d9ab0;
+}
+
+.text-filter-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  background-color: white;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+.text-filter-input:focus {
+  outline: none;
+  border-color: #908dce;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.apply-btn, .reset-btn {
+  flex: 1;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 40px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.apply-btn {
+  background-color: #908dce;
+  color: white;
+}
+
+.apply-btn:hover {
+  background-color: #a1c3e7;
+}
+
+.reset-btn {
+  background-color: #eef1f8;
+  color: #2c3e50;
+  border: 1px solid #cbd5e1;
+}
+
+.reset-btn:hover {
+  background-color: #e2e8f0;
+}
+
+/* Правая часть – список */
+.datasets-list {
+  flex: 1;
+}
+
+.datasets-list h1 {
+  margin-top: 0;
+  margin-bottom: 24px;
+}
+
+.no-results {
+  background-color: white;
+  border-radius: 20px;
+  padding: 40px;
+  text-align: center;
+  color: #8d9ab0;
+}
+
+/* Адаптивность */
+@media (max-width: 900px) {
+  .dataset-list-layout {
+    flex-direction: column;
+  }
+  .filters-panel {
+    width: auto;
+    position: static;
+  }
+  .range-inputs {
+    flex-wrap: wrap;
+  }
+  .range-inputs input {
+    min-width: 100px;
+  }
+}
+
+/* Панель сортировки (над списком датасетов) */
+.sorting-panel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: white;
+  padding: 12px 20px;
+  border-radius: 40px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  flex-wrap: wrap;
+}
+
+.sort-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.sort-select, .sort-order {
+  padding: 8px 16px;
+  border: 1px solid #cbd5e1;
+  border-radius: 40px;
+  font-size: 0.85rem;
+  background-color: white;
+  cursor: pointer;
+}
+
+.sort-select:focus, .sort-order:focus {
+  outline: none;
+  border-color: #908dce;
+}
