@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef, useCallback } from "react";
 import PieChart, { SOFT_COLORS } from './PieChart';
+import RussiaHeatmap from './RussiaHeatmap';
 
 export default function DatasetPage() {
   const navigate = useNavigate();
@@ -270,6 +271,11 @@ export default function DatasetPage() {
             ))}
           </div>
         </>
+      )}
+
+      {/* Хитмап карты России - показываем только если есть колонка area */}
+      {meta?.columns?.some(col => col.field_name === 'area') && (
+        <RussiaHeatmap datasetId={id} />
       )}
 
       <h3>Данные</h3>

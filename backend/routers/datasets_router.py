@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Query
-from typing import List
+from typing import List, Optional
 
 from services.datasets_service import (
     list_datasets,
@@ -7,6 +7,7 @@ from services.datasets_service import (
     get_rows,
 )
 from services.stats_service import get_stats
+from services.heatmap_service import get_heatmap_data
 from models.schemas import DatasetListItem, DatasetMetadata
 
 
@@ -52,5 +53,23 @@ def api_get_dataset_stats(dataset_id: str, recompute: bool = False):
         return stats
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="Dataset not found")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/{dataset_id}/heatmap")
+def api_get_dataset_heatmap(
+    dataset_id: str,
+    urban: Optional[str] = Query(None, description="Фильтр по типу населения"),
+    gender: Optional[str] = Query(None, description="Фильтр по полу")
+):
+    """Получает данные для хитмапа карты регионов России."""
+    try:
+        data = get_heatmap_data(dataset_id, urban_filter=urban, gender_filter=gender)
+        return data
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="Dataset not found")
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
