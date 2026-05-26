@@ -31,13 +31,29 @@ export default function RussiaMap({ datasetId }) {
   const [genderFilter, setGenderFilter] = useState(null);
   const [hoveredRegion, setHoveredRegion] = useState(null);
 
-  useEffect(() => {
-    // Загружаем GeoJSON
+    useEffect(() => {
     fetch('/russia.geojson')
-      .then(res => res.json())
-      .then(setGeoJson)
-      .catch(err => console.error('Failed to load GeoJSON:', err));
-  }, []);
+        .then(res => res.json())
+        .then(setGeoJson)
+        .catch(err => console.error('Failed to load GeoJSON:', err));
+
+    // Скрываем атрибут Leaflet
+    const hideAttribution = () => {
+        const attribution = document.querySelector('.leaflet-control-attribution');
+        if (attribution) {
+        attribution.style.display = 'none';
+        }
+    };
+
+    hideAttribution();
+    
+    // На случай, если карта рендерится позже
+    const interval = setInterval(hideAttribution, 500);
+    
+    return () => clearInterval(interval);
+    }, []);
+
+
 
   const fetchData = async () => {
     setLoading(true);
@@ -193,7 +209,7 @@ export default function RussiaMap({ datasetId }) {
       <MapContainer center={[60, 100]} zoom={2} style={{ height: '600px', width: '100%' }}>
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; OpenStreetMap'
+          attribution=''
         />
         {geoJson && (
           <GeoJSON
