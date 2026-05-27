@@ -15,12 +15,38 @@ const GENDER_FILTERS = [
 ];
 
 // Функция для получения цвета по значению
+// Функция для получения цвета по значению - от светлого розового к темному синему
 function getColor(value, min, max) {
-  if (max === min) return '#E0E0E0';
-  const ratio = (value - min) / (max - min);
-  const intensity = Math.floor(ratio * 255);
-  return `rgb(${100 + intensity}, ${100 + Math.floor(ratio * 100)}, ${200 + Math.floor(ratio * 55)})`;
+  if (max === min) return '#F6A0AC';
+  const ratio = Math.max(0, Math.min(1, (value - min) / (max - min)));
+  
+  // Цветовые точки градиента
+  const colors = [
+    { stop: 0.0, color: [250, 172, 206] },  // rgb(250, 172, 206) - светлый розовый
+    { stop: 0.5, color: [189, 133, 239] },  // rgb(189, 133, 239) - светло-синий
+    { stop: 1.0, color: [89, 82, 195] },  // rgb(89, 82, 195) - темный синий/фиолетовый
+  ];
+  
+  // Находим сегмент градиента
+  let lower = colors[0], upper = colors[colors.length - 1];
+  for (let i = 0; i < colors.length - 1; i++) {
+    if (ratio >= colors[i].stop && ratio <= colors[i + 1].stop) {
+      lower = colors[i];
+      upper = colors[i + 1];
+      break;
+    }
+  }
+  
+  // Интерполяция в пределах сегмента
+  const segmentRatio = (ratio - lower.stop) / (upper.stop - lower.stop);
+  
+  const r = Math.round(lower.color[0] + segmentRatio * (upper.color[0] - lower.color[0]));
+  const g = Math.round(lower.color[1] + segmentRatio * (upper.color[1] - lower.color[1]));
+  const b = Math.round(lower.color[2] + segmentRatio * (upper.color[2] - lower.color[2]));
+  
+  return `rgb(${r}, ${g}, ${b})`;
 }
+
 
 export default function RussiaMap({ datasetId }) {
   const [data, setData] = useState(null);
