@@ -231,9 +231,9 @@ export default function DatasetList() {
                 </div>
                 <div className="dataset-meta-wrapper">
                   <div className="dataset-meta">
-                    <span>📊 {formatNumber(item.rows_count)} строк</span>
-                    <span>💾 {formatFileSize(item.file_size_kb)}</span>
-                    <span>🕒 {formatDate(item.modified)}</span>
+                    <span>{formatNumber(item.rows_count)} строк</span>
+                    <span>Размер: {formatFileSize(item.file_size_kb)}</span>
+                    <span>Обновлен: {formatDate(item.modified)}</span>
                   </div>
                 </div>
               </li>
