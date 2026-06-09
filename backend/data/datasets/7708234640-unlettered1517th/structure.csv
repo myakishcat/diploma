@@ -1,9 +1,9 @@
 field_name,russian_description,english_description,format
-col1,Описание 1,,string
-col2,Описание 2,,integer
-col3,Описание 1,,string
-col4,Описание 2,,integer
-col5,Описание 1,,string
-col6,Описание 2,,integer
-col7,Описание 1,,string
-col8,Описание 2,,integer
+col1,Колонка 1,,string
+col2,Колонка 2,,integer
+col3,Колонка 3,,string
+col4,Колонка 4,,integer
+col5,Колонка 5,,string
+col6,Колонка 6,,integer
+col7,Колонка 7,,string
+col8,Колонка 8,,integer

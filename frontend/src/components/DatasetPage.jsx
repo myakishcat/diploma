@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef, useCallback } from "react";
 import PieChart, { SOFT_COLORS } from './PieChart';
-import RussiaMap from './RussiaMap';  // вместо RussiaHeatmap
+import RussiaMap from './RussiaMap'; 
 
 export default function DatasetPage() {
   const navigate = useNavigate();
@@ -35,7 +35,6 @@ export default function DatasetPage() {
   const handleDownload = (url, filename) => {
     if (!url) return;
 
-    // Преобразуем относительный путь в абсолютный (если нужно)
     let fullUrl = url;
     if (url.startsWith('/')) {
       fullUrl = `http://127.0.0.1:8000${url}`;
@@ -43,9 +42,6 @@ export default function DatasetPage() {
       fullUrl = `http://127.0.0.1:8000/${url}`;
     }
 
-    // Открываем в новой вкладке – для внешних ссылок (https://rosstat.gov.ru/...) 
-    // это вызовет скачивание или отображение в зависимости от настроек сервера.
-    // Если ссылка ведёт на наш бэкенд, то браузер тоже начнёт скачивание (благодаря заголовкам).
     window.open(fullUrl, '_blank');
   };
 
